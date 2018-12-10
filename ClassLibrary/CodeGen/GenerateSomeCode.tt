@@ -1,0 +1,66 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+
+// ReSharper disable All
+// Generated at <#= DateTime.Now #> by <#= Environment.UserName #>
+/* 
+	
+This just makes a set of constants from the file names in the folder named. Its for repro of 
+https://github.com/NuGet/Home/issues/6283
+
+When installing this as a package via nuget, sometimes this TT file is copied and executed before the config file is present. This
+may show an error in the errors list, just configure and rerun the T4.
+
+*/
+#pragma warning disable 618
+
+
+<#
+var configFileName = "GenerateSomeCode.config";
+string configFilePath = Host.ResolvePath(configFileName);
+var configFile = XDocument.Load(configFilePath);
+var configSpecifiedPath = configFile.Root.Descendants().First(f => f.Name.LocalName.Equals("sourcPathForConstants")).Value;
+
+var filesPath = Path.GetTempPath();
+if ("CurrentUserTemp".Equals(configSpecifiedPath, StringComparison.OrdinalIgnoreCase) == false)
+{
+	filesPath = configSpecifiedPath;
+}
+var filesList = Directory.GetFiles(filesPath, "*.*", SearchOption.TopDirectoryOnly);
+
+#>
+
+namespace ClassLibrary.CodeGen
+{
+	using System;
+
+	public class TempFileNameConstants
+	{
+
+<#
+
+for (int i = 0; i < filesList.Length; i++)
+{
+    var tempFile = filesList[i];
+    if (i % 10 == 0)
+    {
+        System.Threading.Thread.Sleep(1); //simulate a more complex parsing and generation of code
+    }
+#>		public const string FILE_<#= i.ToString() #> = @"<#= tempFile #>";
+<#
+}
+
+
+#>
+
+	}
+}

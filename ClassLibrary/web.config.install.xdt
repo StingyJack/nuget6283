@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <system.serviceModel xdt:Transform="InsertIfMissing">
+    <behaviors xdt:Transform="InsertIfMissing">
+      <endpointBehaviors xdt:Transform="InsertIfMissing">
+        <behavior name="endpointPerfCountersBehavior" xdt:Transform="InsertIfMissing">
+          <endpointPerfCountersExtension xdt:Transform="InsertIfMissing"/>
+        </behavior>
+      </endpointBehaviors>
+    </behaviors>
+
+    <extensions xdt:Transform="InsertIfMissing">
+      <behaviorExtensions xdt:Transform="InsertIfMissing">
+        
+      </behaviorExtensions>
+    </extensions>
+  </system.serviceModel>
+</configuration>
